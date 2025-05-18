@@ -1,15 +1,28 @@
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 
-# Create your models here.
-class Registro(models.Model):
-    id = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=50, blank=False, null=False)
-    apellido = models.CharField(max_length=50, blank=False, null=False)
-    alias = models.CharField(max_length=50, blank=False, null=False, unique=True)
-    email = models.EmailField(max_length=200, blank=False, null=False, unique=True)
-    contraseña = models.CharField(max_length=50, blank=False, null=False)
+class UsuarioManager(BaseUserManager):
+    def create_user(self, email, contraseña=None, **extra_fields):
+        if not email:
+            raise ValueError('El correo electrónico es obligatorio')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(contraseña)
+        user.save(using=self._db)
+        return user
+
+class Registro(AbstractBaseUser, PermissionsMixin):
+    nombre = models.CharField(max_length=50)
+    apellido = models.CharField(max_length=50)
+    alias = models.CharField(max_length=50, unique=True)
+    email = models.EmailField(unique=True)
     puntos = models.IntegerField(default=0)
-    elo = models.DecimalField(default=0)
+    elo = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['nombre', 'apellido', 'alias']
+    objects = UsuarioManager()
+
 
 class Torneo(models.Model):
     Modo = [

@@ -1,10 +1,41 @@
 from rest_framework import serializers
-from models import Registro, Torneo, Inscripciones, Partidas
+from .models import Registro, Torneo, Inscripciones, Partidas
 
 class RegistroSerializer(serializers.ModelSerializer):
+    contraseña = serializers.CharField(write_only=True)
+    confirmar_contraseña = serializers.CharField(write_only=True)
+
     class Meta:
         model = Registro
-        fields = '__all__'
+        fields = ['id', 'nombre', 'apellido', 'alias', 'email', 'contraseña', 'confirmar_contraseña']
+
+    def validate(self, data):
+        if data['contraseña'] != data['confirmar_contraseña']:
+            raise serializers.ValidationError("Las contraseñas no coinciden.")
+        return data
+
+    def create(self, validated_data):
+        validated_data.pop('confirmar_contraseña')
+        contraseña = validated_data.pop('contraseña')
+        user = Registro(**validated_data)
+        user.set_password(contraseña)
+        user.save()
+        return user
+
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    contraseña = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        from django.contrib.auth import authenticate
+        usuario = authenticate(email=data['email'], password=data['contraseña'])
+        if not usuario:
+            raise serializers.ValidationError("Credenciales inválidas.")
+        data['usuario'] = usuario
+        return data
+
+
 
 class TorneoSerializer(serializers.ModelSerializer):
     class Meta:
