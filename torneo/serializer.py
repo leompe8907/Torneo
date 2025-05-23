@@ -13,6 +13,11 @@ class RegistroSerializer(serializers.ModelSerializer):
         if data['contraseña'] != data['confirmar_contraseña']:
             raise serializers.ValidationError("Las contraseñas no coinciden.")
         return data
+    
+    def validate_alias(self, value):
+        if Registro.objects.filter(alias=value).exists():
+            raise serializers.ValidationError("Este alias ya está en uso.")
+        return value
 
     def create(self, validated_data):
         validated_data.pop('confirmar_contraseña')
@@ -31,7 +36,9 @@ class LoginSerializer(serializers.Serializer):
         from django.contrib.auth import authenticate
         usuario = authenticate(email=data['email'], password=data['contraseña'])
         if not usuario:
-            raise serializers.ValidationError("Credenciales inválidas.")
+            if not Registro.objects.filter(email=data['email']).exists():
+                raise serializers.ValidationError("El usuario no está registrado.")
+            raise serializers.ValidationError("La contraseña es incorrecta.")
         data['usuario'] = usuario
         return data
 

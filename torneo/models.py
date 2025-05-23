@@ -76,5 +76,7 @@ class Partidas(models.Model):
     torneo = models.ForeignKey(Torneo, on_delete=models.CASCADE)
     participante1 = models.ForeignKey(Registro, on_delete=models.CASCADE, related_name='participante1')
     participante2 = models.ForeignKey(Registro, on_delete=models.CASCADE, related_name='participante2')
+    ronda = models.IntegerField(default=1)
+    ganador = models.ForeignKey(Registro, on_delete=models.CASCADE, related_name='ganador', null=True, blank=True)
     estado = models.CharField(max_length=10, choices=ESTADOS_PARTIDA, default='pendiente')
     fecha = models.DateField(auto_now_add=True)
