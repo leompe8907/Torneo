@@ -28,9 +28,9 @@ bash
 Copiar
 Editar
 git clone https://github.com/leompe8907/Torneo.git
-cd nombre-del-repo
-Crea y activa un entorno virtual:
+cd Torneo
 
+Crea y activa un entorno virtual:
 bash
 Copiar
 Editar
