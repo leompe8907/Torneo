@@ -1,72 +1,63 @@
-Django API - Backend del Proyecto
-Este es un proyecto backend desarrollado con Django 5 y Django REST Framework. Soporta autenticación con JWT, conexión a base de datos MySQL y configuración para CORS, ideal para integrarse con un frontend moderno.
+# Django API - Backend del Proyecto
 
-⚙️ Tecnologías
-Python
+Este es el backend de un proyecto desarrollado con **Django 5** y **Django REST Framework**. Incluye **autenticación JWT**, conexión a **bases de datos MySQL** y configuración **CORS**, lo que lo hace perfecto para integrarse con cualquier frontend moderno.
 
-Django 5
+---
 
-Django REST Framework
+## ⚙️ Tecnologías Utilizadas
 
-SimpleJWT (para autenticación)
+* **Python**
+* **Django 5**
+* **Django REST Framework**
+* **SimpleJWT** (para autenticación segura)
+* **MySQL** (a través de `mysqlclient`)
+* **CORS Headers**
 
-MySQL (con mysqlclient)
+---
 
-CORS Headers
+## 📦 Requisitos Previos
 
-📦 Requisitos
-Python 3.10+
+Asegúrate de tener instalado lo siguiente:
 
-MySQL Server
+* **Python 3.10+**
+* **Servidor MySQL** en ejecución
+* **pip** (gestor de paquetes de Python)
 
-pip
+---
 
-🔧 Instalación
-Clona este repositorio:
+## 🔧 Instalación y Configuración
 
-bash
-Copiar
-Editar
-git clone https://github.com/leompe8907/Torneo.git
-cd Torneo
+Sigue estos pasos para poner en marcha el proyecto:
 
-Crea y activa un entorno virtual:
-bash
-Copiar
-Editar
-python -m venv env
-source env/bin/activate
-Windows: env\\Scripts\\activate
-Instala las dependencias:
+1.  **Clona el repositorio:**
+    ```bash
+    git clone https://github.com/leompe8907/Torneo.git
+    cd Torneo
+    ```
 
-bash
-Copiar
-Editar
-pip install -r requirements.txt
-Configura la base de datos en mysite/settings.py.
+2.  **Crea y activa un entorno virtual:**
+    ```bash
+    python -m venv env
+    # En Linux/macOS:
+    source env/bin/activate
+    # En Windows:
+    .\env\Scripts\activate
+    ```
 
-Aplica migraciones:
+3.  **Instala las dependencias:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-bash
-Copiar
-Editar
-python manage.py migrate
-Ejecuta el servidor:
+4.  **Aplica las migraciones de la base de datos:**
+    ```bash
+    python manage.py makemigrations
+    python manage.py migrate
+    ```
 
-bash
-Copiar
-Editar
-python manage.py runserver
-🧪 Pruebas
-Puedes correr los tests definidos con:
+5.  **Ejecuta el servidor de desarrollo:**
+    ```bash
+    python manage.py runserver
+    ```
 
-bash
-Copiar
-Editar
-python manage.py test
-🌐 API
-Esta aplicación expone una API REST. Requiere autenticación JWT para la mayoría de los endpoints. Puedes obtener un token en el endpoint /api/token/.
-
-🛡️ Seguridad
-Manejo de tokens JWT.
-Soporte CORS para integración con frontends externos.
+---
