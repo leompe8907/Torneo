@@ -76,9 +76,13 @@ class TorneoView(APIView):
         """
         
         torneos = Torneo.objects.all()
+        
+        if not torneos.exists():
+            return Response({'mensaje': 'No hay torneos disponibles'}, status=404)
+        
+        ahora = timezone.now()
 
         for torneo in torneos:
-            ahora = timezone.now()
             fecha_hora_inicio = timezone.make_aware(datetime.combine(torneo.fecha_inicio, torneo.hora_inicio))
 
             # Cambiar de pendiente a en_curso
@@ -86,8 +90,8 @@ class TorneoView(APIView):
                 torneo.estado = 'en_curso'
                 torneo.save()
 
-            # Cambiar de en_curso a finalizada si todas las partidas terminaron
-            if torneo.estado == 'en_curso':
+            # Cambiar de en_curso a finalizada si todas las partidas están finalizadas
+            elif torneo.estado == 'en_curso':
                 partidas = Partidas.objects.filter(torneo=torneo)
                 if partidas.exists() and all(p.estado == 'finalizada' for p in partidas):
                     torneo.estado = 'finalizada'
